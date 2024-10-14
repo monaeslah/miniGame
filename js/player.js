@@ -28,34 +28,45 @@ class Player {
     this.sprite.style.top = `${this.positionY * this.grid.cellSize}px`
     this.sprite.style.width = `${this.grid.cellSize}px`
     this.sprite.style.height = `${this.grid.cellSize}px`
+    console.log(this.grid.grid)
   }
 
   moveRight () {
-    console.log('old one is ', this.positionX)
-
-    this.positionX += 1
-    this.updatePosition()
-    console.log(this.positionX)
+    if (this.grid.grid[this.positionY][this.positionX + 1] === 'empty') {
+      this.positionX += 1
+      this.updatePosition()
+    }
   }
   moveLeft () {
-    this.positionX -= 1
-    this.updatePosition()
+    if (this.grid.grid[this.positionY][this.positionX - 1] === 'empty') {
+      this.positionX -= 1
+      this.updatePosition()
+    }
   }
   moveUp () {
-    this.positionY += 1
-    this.updatePosition()
+    if (this.grid.grid[this.positionY - 1][this.positionX] === 'empty') {
+      this.positionY -= 1
+      this.updatePosition()
+    }
   }
   moveDown () {
-    this.positionY -= 1
-    this.updatePosition()
+    if (this.grid.grid[this.positionY + 1][this.positionX] === 'empty') {
+      this.positionY += 1
+      this.updatePosition()
+    }
   }
 }
 const player = new Player(gameGrid)
-// let startingPositionR = player.startingPosition()
+
 document.addEventListener('keydown', e => {
   if (e.code === 'ArrowLeft') {
     player.moveLeft()
   } else if (e.code === 'ArrowRight') {
     player.moveRight()
+  } else if (e.code === 'ArrowDown') {
+    player.moveDown()
+    console.log(e.code)
+  } else if (e.code === 'ArrowUp') {
+    player.moveUp()
   }
 })
