@@ -1,0 +1,11 @@
+#grid {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+#grid div {
+  margin: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  box-sizing: border-box;
+}
