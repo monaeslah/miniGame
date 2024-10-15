@@ -17,7 +17,12 @@ class Grid {
         } else if (this.isPatternedBlock(x, y)) {
           row.push('block')
         } else {
-          row.push('empty')
+          if (Math.random() < 0.2) {
+            // 20% chance to be destructible
+            row.push('destructible')
+          } else {
+            row.push('empty')
+          }
         }
       }
       this.grid.push(row)
@@ -47,6 +52,8 @@ class Grid {
 
         if (cell === 'block') {
           cellDiv.style.backgroundColor = ' gray'
+        } else if (cell == 'destructible') {
+          cellDiv.style.backgroundColor = ' red'
         } else {
           cellDiv.style.backgroundColor = 'green'
         }
