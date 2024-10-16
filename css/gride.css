@@ -10,6 +10,11 @@
   border: 1px solid transparent;
   box-sizing: border-box;
 }
+#sprite {
+  width: 30px;
+  height: 30px;
+  position: absolute;
+}
 .bomb {
   position: absolute;
   width: 30px;

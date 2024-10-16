@@ -3,8 +3,8 @@ class Player {
     this.grid = grid
     this.positionX = 0
     this.positionY = 0
-    this.newPositionX = 0
-    this.newPositionY = 0
+    this.numbers = 18
+
     this.sprite = document.createElement('img')
     this.sprite.src = `../assets/bomberman.png`
     this.sprite.id = 'sprite'
@@ -13,23 +13,37 @@ class Player {
     this.movement()
   }
   startingPosition () {
-    const oddNumbers = [3, 5, 7, 9, 11, 13, 15, 17]
-    const randomIndex = Math.floor(Math.random() * oddNumbers.length)
-    const randomIndexY = Math.floor(Math.random() * oddNumbers.length)
-    this.positionX = oddNumbers[randomIndex]
-    this.positionY = oddNumbers[randomIndexY]
+    const oddNumbers = Array.from({ length: this.numbers }, (_, i) => i).filter(
+      num => num % 2 !== 0
+    )
+    let isValidPosition = false
+
+    while (!isValidPosition) {
+      const randomIndex = Math.floor(Math.random() * oddNumbers.length)
+      const randomIndexY = Math.floor(Math.random() * oddNumbers.length)
+
+      this.positionX = oddNumbers[randomIndex]
+      this.positionY = oddNumbers[randomIndexY]
+
+      if (this.grid.grid[this.positionY][this.positionX] === 'empty') {
+        isValidPosition = true
+      }
+    }
 
     this.updatePosition()
-    this.playerElement.appendChild(this.sprite)
+
+    document
+      .getElementById(`cell-${this.positionX}-${this.positionY}`)
+      .appendChild(this.sprite)
   }
+
   updatePosition () {
-    this.newPositionX = this.positionX * this.grid.cellSize
-    this.newPositionY = this.positionY * this.grid.cellSize
-    this.sprite.style.position = 'absolute'
-    this.sprite.style.left = `${this.newPositionX}px`
-    this.sprite.style.top = `${this.newPositionY}px`
-    this.sprite.style.width = `${this.grid.cellSize}px`
-    this.sprite.style.height = `${this.grid.cellSize}px`
+    const currentCell = document.getElementById(
+      `cell-${this.positionX}-${this.positionY}`
+    )
+    if (currentCell) {
+      currentCell.appendChild(this.sprite)
+    }
   }
   movement (dx, dy) {
     const newX = this.positionX + dx

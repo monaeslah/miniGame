@@ -27,6 +27,7 @@ class Grid {
       }
       this.grid.push(row)
     }
+    return this.grid
   }
   isOuterBorder (x, y) {
     return x === 0 || x === this.width - 1 || y === 0 || y === this.height - 1
@@ -49,7 +50,7 @@ class Grid {
         const cellDiv = document.createElement('div')
         cellDiv.style.width = `${this.cellSize}px`
         cellDiv.style.height = `${this.cellSize}px`
-
+        cellDiv.id = `cell-${x}-${y}`
         if (cell === 'block') {
           cellDiv.style.backgroundColor = ' gray'
         } else if (cell == 'destructible') {
