@@ -6,7 +6,7 @@ class Player {
     this.numbers = 18
 
     this.sprite = document.createElement('img')
-    this.sprite.src = `../images/bomberman.png`
+    this.sprite.src = `./images/bomberman.png`
     this.sprite.id = 'sprite'
     this.playerElement = document.getElementById('grid')
     this.startingPosition()

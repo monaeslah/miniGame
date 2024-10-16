@@ -6,8 +6,8 @@ class Bomb {
     this.collision = document.createElement('img')
     this.timerView = document.createElement('p')
     this.espriteElement = document.getElementById('sprite')
-    this.bomb.src = `../images/bomb.gif`
-    this.collision.src = `../images/collision.gif`
+    this.bomb.src = `./images/bomb.gif`
+    this.collision.src = `./images/collision.gif`
     this.bomb.className = 'bomb'
     this.collision.className = 'collision'
     this.bomb.style.display = 'none'
