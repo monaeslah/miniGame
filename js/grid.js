@@ -42,8 +42,15 @@ class Grid {
     this.domElement.style.width = `${this.width * this.cellSize}px`
     this.domElement.style.height = `${this.height * this.cellSize}px`
     this.domElement.style.display = 'grid'
-    this.domElement.style.gridTemplateColumns = `repeat(${this.width}, ${this.cellSize}px)`
-    this.domElement.style.gridTemplateRows = `repeat(${this.height}, ${this.cellSize}px)`
+    this.domElement.style.gridTemplateColumns = `repeat(
+      ${this.width},
+      ${this.cellSize}px
+    )`
+
+    this.domElement.style.gridTemplateRows = `repeat(
+      ${this.height},
+      ${this.cellSize}px
+    )`
 
     this.grid.forEach((row, y) => {
       row.forEach((cell, x) => {
@@ -52,11 +59,11 @@ class Grid {
         cellDiv.style.height = `${this.cellSize}px`
         cellDiv.id = `cell-${x}-${y}`
         if (cell === 'block') {
-          cellDiv.style.backgroundColor = ' gray'
+          cellDiv.className = 'block'
         } else if (cell == 'destructible') {
-          cellDiv.style.backgroundColor = ' red'
+          cellDiv.className = 'wall'
         } else {
-          cellDiv.style.backgroundColor = 'green'
+          cellDiv.className = 'path'
         }
         this.domElement.appendChild(cellDiv)
       })

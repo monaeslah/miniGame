@@ -5,14 +5,14 @@ class Bomb {
     this.bomb = document.createElement('img')
     this.collision = document.createElement('img')
     this.timerView = document.createElement('p')
-    this.espriteElement = document.getElementById('sprite')
+
     this.bomb.src = `./images/bomb.gif`
     this.collision.src = `./images/collision.gif`
     this.bomb.className = 'bomb'
     this.collision.className = 'collision'
     this.bomb.style.display = 'none'
     this.collision.style.display = 'none'
-    this.position = [this.player.positionX, this.player.positionY]
+
     this.timer = 4
     this.explosionRadius = [
       this.player.positionX - 1,
@@ -30,30 +30,20 @@ class Bomb {
     ) {
       return
     }
-
-    // Place the bomb in the current player's cell
-    const playerCell = document.getElementById(
-      `cell-${this.player.positionX}-${this.player.positionY}`
+    this.bombPosition = [this.player.positionX, this.player.positionY]
+    const bombCell = document.getElementById(
+      `cell-${this.bombPosition[0]}-${this.bombPosition[1]}`
     )
-    if (playerCell) {
-      playerCell.appendChild(this.bomb)
-      playerCell.appendChild(this.collision)
+    if (bombCell) {
+      bombCell.appendChild(this.bomb)
+      bombCell.appendChild(this.collision)
     }
 
-    this.bomb.style.display = 'none'
-    this.collision.style.display = 'none'
-
-    // this.espriteElement.insertAdjacentElement('afterend', this.bomb)
-    // this.espriteElement.insertAdjacentElement('afterend', this.collision)
-
-    // this.bomb.style.left = `${this.player.calculatedX}px`
-    // this.bomb.style.top = `${this.player.calculatedY}px`
-    // this.collision.style.left = `${this.player.calculatedX}px`
-    // this.collision.style.top = `${this.player.calculatedY}px`
     if (check === true) {
       this.bomb.style.display = 'block'
       this.collision.style.display = 'none'
       this.explosionEffect()
+
       setTimeout(() => {
         this.collisionDetection()
       }, 3000)
@@ -66,7 +56,7 @@ class Bomb {
       if (this.timer === 0) {
         this.bomb.style.display = 'none'
         this.collision.style.display = 'block'
-        console.log(this.collision.style.display)
+
         this.timer = 4
         setTimeout(() => {
           this.collision.style.display = 'none'
@@ -78,13 +68,14 @@ class Bomb {
 
   collisionDetection () {
     this.explosionRadius = [
-      { x: this.player.positionX - 1, y: this.player.positionY },
-      { x: this.player.positionX + 1, y: this.player.positionY },
-      { x: this.player.positionX, y: this.player.positionY - 1 },
-      { x: this.player.positionX, y: this.player.positionY + 1 }
+      { x: this.bombPosition[0] - 1, y: this.bombPosition[1] },
+      { x: this.bombPosition[0], y: this.bombPosition[1] - 1 },
+      { x: this.bombPosition[0] + 1, y: this.bombPosition[1] },
+      { x: this.bombPosition[0], y: this.bombPosition[1] + 1 },
+      { x: this.bombPosition[0], y: this.bombPosition[1] } // Center of the explosion
     ]
+
     this.explosionRadius.forEach(({ x, y }) => {
-      console.log('hhh')
       if (
         x >= 0 &&
         x < this.player.numbers &&
@@ -92,13 +83,21 @@ class Bomb {
         y < this.player.numbers
       ) {
         const cell = document.getElementById(`cell-${x}-${y}`)
-        console.log('cell', x, y, cell)
+
         if (cell) {
-          cell.style.backgroundColor = 'yellow'
-          console.log('cell', x, y, cell)
-          // setTimeout(() => {
-          //   cell.style.backgroundColor = ''
-          // }, 1000)
+          if (this.player.positionX === x && this.player.positionY === y) {
+            this.player.life-- // Decrease player's life
+            console.log(`Player hit! Life remaining: ${this.player.life}`)
+
+            // Optional: Check if player's life is 0 and trigger game over
+            if (this.player.life === 0) {
+              this.player.gameOver() // Assuming gameOver() is a method in the Player class
+            }
+          }
+          if (!cell.classList.contains('block')) {
+            cell.className = 'path'
+            this.grid[y][x] = 'empty' //
+          }
         }
       }
     })

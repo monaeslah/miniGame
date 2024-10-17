@@ -4,13 +4,16 @@ class Player {
     this.positionX = 0
     this.positionY = 0
     this.numbers = 18
-
+    this.life = 2
+    this.duration = 600
+    this.isAlive = true
     this.sprite = document.createElement('img')
     this.sprite.src = `./images/bomberman.png`
     this.sprite.id = 'sprite'
     this.playerElement = document.getElementById('grid')
     this.startingPosition()
     this.movement()
+    this.playerLife()
   }
   startingPosition () {
     const oddNumbers = Array.from({ length: this.numbers }, (_, i) => i).filter(
@@ -31,26 +34,26 @@ class Player {
     }
 
     this.updatePosition()
-
-    document
-      .getElementById(`cell-${this.positionX}-${this.positionY}`)
-      .appendChild(this.sprite)
   }
 
   updatePosition () {
+    const previousCell = document.querySelector('#grid .player')
+    if (previousCell) {
+      previousCell.classList.remove('player')
+      previousCell.removeChild(this.sprite) // Remove the sprite from the old cell
+    }
     const currentCell = document.getElementById(
       `cell-${this.positionX}-${this.positionY}`
     )
+
     if (currentCell) {
+      currentCell.classList.add('player')
       currentCell.appendChild(this.sprite)
     }
   }
   movement (dx, dy) {
     const newX = this.positionX + dx
     const newY = this.positionY + dy
-    if (isNaN(newX) || isNaN(newY)) {
-      return
-    }
 
     if (
       newX >= 0 &&
@@ -58,24 +61,80 @@ class Player {
       newY >= 0 &&
       newY < this.grid.height
     ) {
-      if (this.grid.grid[newY][newX] === 'empty') {
+      const targetCell = this.grid.grid[newY][newX]
+      if (targetCell === 'empty') {
         this.positionX = newX
         this.positionY = newY
         this.updatePosition()
       }
     }
   }
+  handleKeyPress (e) {
+    if (e.code === 'ArrowLeft') {
+      this.movement(-1, 0)
+    } else if (e.code === 'ArrowRight') {
+      this.movement(1, 0)
+    } else if (e.code === 'ArrowDown') {
+      this.movement(0, 1)
+    } else if (e.code === 'ArrowUp') {
+      this.movement(0, -1)
+    }
+  }
+  playerLife () {
+    let death = setInterval(() => {
+      console.log(this.duration)
+      this.duration--
+      if (this.duration === 0) {
+        this.gameOver()
+        clearInterval(death)
+      }
+    }, 1000)
+  }
+  gameOver () {
+    this.isAlive = false
+    // Stop player from moving or doing anything else
+    document.removeEventListener('keydown', this.handleKeyPress.bind(this))
+
+    // Show Game Over screen with a Restart button
+    const gameOverMessage = document.createElement('div')
+    gameOverMessage.id = 'game-over'
+    gameOverMessage.innerHTML = `<p>Game Over!</p>
+      <button id="restart-btn">Restart</button>`
+
+    document.body.appendChild(gameOverMessage)
+
+    // Remove the player sprite
+    const playerCell = document.getElementById(
+      cell - `${this.positionX}-${this.positionY}`
+    )
+    if (playerCell && this.sprite) {
+      playerCell.removeChild(this.sprite)
+    }
+
+    // Add event listener to the Restart button
+    const restartButton = document.getElementById('restart-btn')
+    restartButton.addEventListener('click', () => this.restartGame())
+  }
+
+  restartGame () {
+    // Remove the Game Over message
+    const gameOverMessage = document.getElementById('game-over')
+    if (gameOverMessage) {
+      document.body.removeChild(gameOverMessage)
+      window.location.reload()
+    }
+
+    // Reset player stats and position
+    this.life = 3
+    this.isAlive = true
+    this.startingPosition()
+
+    // Re-enable player movement
+    document.addEventListener('keydown', this.handleKeyPress.bind(this))
+  }
 }
 const player = new Player(gameGrid)
 
 document.addEventListener('keydown', e => {
-  if (e.code === 'ArrowLeft') {
-    player.movement(-1, 0)
-  } else if (e.code === 'ArrowRight') {
-    player.movement(1, 0)
-  } else if (e.code === 'ArrowDown') {
-    player.movement(0, 1)
-  } else if (e.code === 'ArrowUp') {
-    player.movement(0, -1)
-  }
+  player.handleKeyPress(e)
 })

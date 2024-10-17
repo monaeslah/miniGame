@@ -10,6 +10,15 @@
   border: 1px solid transparent;
   box-sizing: border-box;
 }
+.wall {
+  background-color: red;
+}
+.path {
+  background-color: green;
+}
+.block {
+  background-color: gray;
+}
 #sprite {
   width: 30px;
   height: 30px;
@@ -27,4 +36,12 @@
   width: 35px;
   height: 30px;
   display: none;
+}
+#game-over {
+  position: absolute;
+  top: 0;
+  width: 800px;
+  height: 600px;
+  background-color: aqua;
+  color: blueviolet;
 }
