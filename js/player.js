@@ -16,7 +16,7 @@ class Player {
     this.lifeElement = document.getElementById('player-sprite')
     this.lifeElement = document.createElement('div')
     this.lifeElement.classList = 'life-time'
-    document.body.appendChild(this.lifeElement)
+
     this.startingPosition()
     this.grid.initGrid(this.positionX, this.positionY)
     this.movement()
@@ -32,9 +32,10 @@ class Player {
     document.body.appendChild(this.winnerElement)
     this.winnerElement.style.display = 'none'
     this.deathMonitor = document.createElement('div')
-    this.deathMonitor.id = 'life-number'
-    this.deathMonitor.innerHTML = `life remaining: ${this.life}`
+    this.deathMonitor.className = 'life-number'
+    this.deathMonitor.innerHTML = `<p>life remaining: ${this.life}</p>`
     document.body.appendChild(this.deathMonitor)
+    document.body.appendChild(this.lifeElement)
   }
   startingPosition () {
     const oddNumbers = Array.from({ length: this.numbers }, (_, i) => i).filter(
@@ -86,8 +87,7 @@ class Player {
       this.levelElement.style.display = 'block'
       this.levelElement.innerHTML = `
      <img src="./images/looser2.gif" alt="" srcset="">
-     <p>Level up!!
-     <br>
+     <p>
     Welcome to  level ${gameGrid.level}</p>`
       setTimeout(() => {
         this.levelElement.style.display = 'none'
@@ -103,8 +103,7 @@ class Player {
       this.winnerElement.style.display = 'block'
       this.winnerElement.innerHTML = `
      <img src="./images/winner.gif" alt="" srcset="">
-     <p>Congratulations!!!
-     <br>
+   
    You have completed the game!</p>`
     }
   }
@@ -152,6 +151,8 @@ class Player {
   gameOver () {
     this.isAlive = false
     this.grid.domElement.style.display = 'none'
+    this.lifeElement.style.display = 'none'
+
     document.removeEventListener('keydown', this.handleKeyPress.bind(this))
     const gameOverSound = new Audio('./sound/game-over-38511.mp3')
 

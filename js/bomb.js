@@ -41,7 +41,7 @@ class Bomb {
     this.scoreMonitor.appendChild(scoreValue)
     document.body.appendChild(this.scoreMonitor)
     this.bombMonitor = document.createElement('div')
-    this.bombMonitor.id = 'bomb-number'
+    this.bombMonitor.className = 'bomb-number'
     this.bombMonitor.innerHTML = `Bomb remaining: ${this.bombNumber}`
     document.body.appendChild(this.bombMonitor)
   }

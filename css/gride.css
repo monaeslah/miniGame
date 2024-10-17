@@ -1,3 +1,17 @@
+@font-face {
+  font-family: 'MyCustomFont';
+  src: url('../fonts/KnightWarrior-w16n8.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+/* Now apply the font */
+body,
+#grid,
+#sprite,
+.winner p {
+  font-family: 'MyCustomFont', sans-serif;
+}
 #grid {
   margin: auto;
   padding: 0;
@@ -84,7 +98,19 @@
 }
 .life-time {
   position: absolute;
-  top: 10px;
+  top: 60px;
+}
+.life-number {
+  position: absolute;
+  top: 70px;
+}
+.player-assets {
+  position: absolute;
+  top: 120px;
+}
+.bomb-number {
+  position: absolute;
+  top: 110px;
 }
 .winner {
   position: absolute;
