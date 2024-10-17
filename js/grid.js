@@ -2,7 +2,7 @@ class Grid {
   constructor () {
     this.width = 19
     this.height = 19
-    this.cellSize = 30
+    this.cellSize = 35
     this.domElement = document.getElementById('grid')
     this.grid = []
     this.uniquePosition = null
@@ -11,6 +11,8 @@ class Grid {
   }
 
   initGrid (playerStartX, playerStartY) {
+    const lifeSound = new Audio('./sound/scream-ride-start-91271.mp3')
+    lifeSound.play()
     for (let y = 0; y < this.height; y++) {
       const row = []
       for (let x = 0; x < this.width; x++) {

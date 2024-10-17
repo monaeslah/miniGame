@@ -5,7 +5,7 @@ class Player {
     this.positionY = 0
     this.numbers = 18
     this.life = 2
-    this.duration = 600
+    this.duration = 120
     this.isAlive = true
 
     this.sprite = document.createElement('img')
@@ -67,6 +67,8 @@ class Player {
   nextLevel () {
     if (gameGrid.level < gameGrid.maxLevel) {
       gameGrid.level++
+      const lifeSound = new Audio('./sound/game-level-complete-143022.mp3')
+      lifeSound.play()
       alert(`Level up! Welcome to level ${gameGrid.level}`)
       gameGrid.grid = []
       gameGrid.initGrid(this.positionX, this.positionY)
@@ -118,9 +120,49 @@ class Player {
       }
     }, 1000)
   }
+
   gameOver () {
     this.isAlive = false
-    location.href = 'gameover.html'
+    this.grid.domElement.style.display = 'none'
+    document.removeEventListener('keydown', this.handleKeyPress.bind(this))
+    const gameOverSound = new Audio('./sound/game-over-38511.mp3')
+
+    gameOverSound.play()
+
+    const gameOverMessage = document.createElement('div')
+    gameOverMessage.id = 'page-gameover'
+    gameOverMessage.innerHTML = `<p>Game Over!</p>
+     <img src="./images/gameover.gif" alt="" srcset="">
+      <a href='./index.html'><button id="restart-btn">Restart</button></a>`
+
+    document.body.appendChild(gameOverMessage)
+
+    const playerCell = document.getElementById(
+      `cell-${this.positionX}-${this.positionY}`
+    )
+    if (playerCell && this.sprite) {
+      playerCell.removeChild(this.sprite)
+    }
+
+    const restartButton = document.getElementById('restart-btn')
+    restartButton.addEventListener('click', () => this.restartGame())
+  }
+
+  restartGame () {
+    const gameOverMessage = document.getElementById('game-over')
+    if (gameOverMessage) {
+      console.log(gameOverMessage.style.display)
+      document.body.removeChild(gameOverMessage)
+      gameOverMessage.style.display = 'none'
+    }
+
+    this.grid.domElement.style.display = 'grid'
+    this.life = 3
+    this.isAlive = true
+    this.duration = 6
+    this.startingPosition()
+
+    document.addEventListener('keydown', this.handleKeyPress.bind(this))
   }
 }
 const player = new Player(gameGrid)

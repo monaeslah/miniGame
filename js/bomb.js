@@ -95,6 +95,11 @@ class Bomb {
   }
 
   collisionDetection () {
+    const collisionSound = new Audio(
+      './sound/explosion-sound-effect-1-241821.mp3'
+    )
+
+    collisionSound.play()
     this.explosionRadius = [
       { x: this.bombPosition[0] - 1, y: this.bombPosition[1] },
       { x: this.bombPosition[0], y: this.bombPosition[1] - 1 },
@@ -130,6 +135,9 @@ class Bomb {
 
               this.extraLife.style.display = 'block'
               this.player.life++
+              const lifeSound = new Audio('./sound/coin-recieved-230517.mp3')
+
+              lifeSound.play()
               setTimeout(() => {
                 this.extraLife.style.display = 'none'
                 console.log(
