@@ -5,12 +5,17 @@ class Grid {
     this.cellSize = 30
     this.domElement = document.getElementById('grid')
     this.grid = []
+    this.uniquePosition = null
+    this.level = 1
+    this.maxLevel = 3
   }
-  initGrid () {
+  initGrid (playerStartX, playerStartY) {
     for (let y = 0; y < this.height; y++) {
       const row = []
       for (let x = 0; x < this.width; x++) {
-        if (this.isOuterBorder(x, y)) {
+        if (this.isNearPlayer(x, y, playerStartX, playerStartY)) {
+          row.push('empty')
+        } else if (this.isOuterBorder(x, y)) {
           row.push('block')
         } else if (this.isEmptyInnerBorder(x, y)) {
           row.push('empty')
@@ -27,7 +32,12 @@ class Grid {
       }
       this.grid.push(row)
     }
+    this.placeUniqueCell(playerStartX, playerStartY)
     return this.grid
+  }
+  isNearPlayer (x, y, playerStartX, playerStartY) {
+    // Define a 3x3 area around the player as the "safe zone"
+    return Math.abs(x - playerStartX) <= 1 && Math.abs(y - playerStartY) <= 1
   }
   isOuterBorder (x, y) {
     return x === 0 || x === this.width - 1 || y === 0 || y === this.height - 1
@@ -37,6 +47,25 @@ class Grid {
   }
   isPatternedBlock (x, y) {
     return x >= 2 && y >= 2 && x % 2 === 0 && y % 2 === 0
+  }
+  placeUniqueCell (playerStartX, playerStartY) {
+    let uniqueX, uniqueY
+    let isFarEnough = false
+    while (!isFarEnough) {
+      uniqueX = Math.floor(Math.random() * this.width)
+      uniqueY = Math.floor(Math.random() * this.height)
+
+      // Ensure it's not near the player's starting position and is in an empty cell
+      if (
+        !this.isNearPlayer(uniqueX, uniqueY, playerStartX, playerStartY) &&
+        this.grid[uniqueY][uniqueX] === 'empty'
+      ) {
+        isFarEnough = true
+      }
+    }
+    // Assign this position as "unique"
+    this.grid[uniqueY][uniqueX] = 'unique'
+    this.uniquePosition = { x: uniqueX, y: uniqueY } // Store its position for reference later
   }
   renderGrid () {
     this.domElement.style.width = `${this.width * this.cellSize}px`
@@ -62,6 +91,8 @@ class Grid {
           cellDiv.className = 'block'
         } else if (cell == 'destructible') {
           cellDiv.className = 'wall'
+        } else if (cell === 'unique') {
+          cellDiv.className = 'unique'
         } else {
           cellDiv.className = 'path'
         }

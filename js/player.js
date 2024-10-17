@@ -8,10 +8,11 @@ class Player {
     this.duration = 600
     this.isAlive = true
     this.sprite = document.createElement('img')
-    this.sprite.src = `./images/bomberman.png`
+    this.sprite.src = './images/bomberman.png'
     this.sprite.id = 'sprite'
     this.playerElement = document.getElementById('grid')
     this.startingPosition()
+    this.grid.initGrid(this.positionX, this.positionY)
     this.movement()
     this.playerLife()
   }
@@ -40,7 +41,7 @@ class Player {
     const previousCell = document.querySelector('#grid .player')
     if (previousCell) {
       previousCell.classList.remove('player')
-      previousCell.removeChild(this.sprite) // Remove the sprite from the old cell
+      previousCell.removeChild(this.sprite)
     }
     const currentCell = document.getElementById(
       `cell-${this.positionX}-${this.positionY}`
@@ -49,7 +50,19 @@ class Player {
     if (currentCell) {
       currentCell.classList.add('player')
       currentCell.appendChild(this.sprite)
+      console.log()
+      if (this.grid.grid[this.positionY][this.positionX] === 'unique') {
+        console.log('hell yeah', currentCell.className)
+
+        this.nextLevel()
+      }
     }
+  }
+  nextLevel () {
+    alert(
+      'Congratulations! You reached the unique cell and advance to the next level!'
+    )
+    // Implement logic to advance to the next level, reset the game, etc.
   }
   movement (dx, dy) {
     const newX = this.positionX + dx
@@ -62,7 +75,8 @@ class Player {
       newY < this.grid.height
     ) {
       const targetCell = this.grid.grid[newY][newX]
-      if (targetCell === 'empty') {
+
+      if (targetCell === 'empty' || targetCell === 'unique') {
         this.positionX = newX
         this.positionY = newY
         this.updatePosition()
@@ -105,7 +119,7 @@ class Player {
 
     // Remove the player sprite
     const playerCell = document.getElementById(
-      cell - `${this.positionX}-${this.positionY}`
+      `cell-${this.positionX}-${this.positionY}`
     )
     if (playerCell && this.sprite) {
       playerCell.removeChild(this.sprite)
