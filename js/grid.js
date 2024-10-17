@@ -8,7 +8,6 @@ class Grid {
     this.uniquePosition = null
     this.level = 1
     this.maxLevel = 3
-    this.gifts = ['extraBomb', 'extraScore', 'extraTime', null]
   }
 
   initGrid (playerStartX, playerStartY) {
@@ -16,23 +15,20 @@ class Grid {
       const row = []
       for (let x = 0; x < this.width; x++) {
         if (this.isNearPlayer(x, y, playerStartX, playerStartY)) {
-          row.push({ type: 'empty', gift: null })
+          row.push('empty')
         } else if (this.isOuterBorder(x, y)) {
-          row.push({ type: 'block', gift: null })
+          row.push('block')
         } else if (this.isEmptyInnerBorder(x, y)) {
-          row.push({ type: 'empty', gift: null })
+          row.push('empty')
         } else if (this.isPatternedBlock(x, y)) {
-          row.push({ type: 'block', gift: null })
+          row.push('block')
         } else {
           const wallChance = 0.2 + 0.1 * (this.level - 1)
-          // Assign a destructible wall with a random gift
-          const randomGift =
-            this.gifts[Math.floor(Math.random() * this.gifts.length)]
 
           if (Math.random() < wallChance) {
-            row.push({ type: 'destructible', gift: randomGift })
+            row.push('destructible')
           } else {
-            row.push({ type: 'empty', gift: null })
+            row.push('empty')
           }
         }
       }
