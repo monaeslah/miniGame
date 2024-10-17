@@ -15,6 +15,7 @@ class Player {
     this.lifeMonitor.className = 'player-sprite'
     this.lifeElement = document.getElementById('player-sprite')
     this.lifeElement = document.createElement('div')
+    this.lifeElement.classList = 'life-time'
     document.body.appendChild(this.lifeElement)
     this.startingPosition()
     this.grid.initGrid(this.positionX, this.positionY)
@@ -119,39 +120,7 @@ class Player {
   }
   gameOver () {
     this.isAlive = false
-
-    document.removeEventListener('keydown', this.handleKeyPress.bind(this))
-
-    const gameOverMessage = document.createElement('div')
-    gameOverMessage.id = 'game-over'
-    gameOverMessage.innerHTML = `<p>Game Over!</p>
-      <button id="restart-btn">Restart</button>`
-
-    document.body.appendChild(gameOverMessage)
-
-    const playerCell = document.getElementById(
-      `cell-${this.positionX}-${this.positionY}`
-    )
-    if (playerCell && this.sprite) {
-      playerCell.removeChild(this.sprite)
-    }
-
-    const restartButton = document.getElementById('restart-btn')
-    restartButton.addEventListener('click', () => this.restartGame())
-  }
-
-  restartGame () {
-    const gameOverMessage = document.getElementById('game-over')
-    if (gameOverMessage) {
-      document.body.removeChild(gameOverMessage)
-      window.location.reload()
-    }
-
-    this.life = 3
-    this.isAlive = true
-    this.startingPosition()
-
-    document.addEventListener('keydown', this.handleKeyPress.bind(this))
+    location.href = 'gameover.html'
   }
 }
 const player = new Player(gameGrid)
