@@ -48,3 +48,12 @@
 .unique {
   background-color: aqua;
 }
+.gift-extra-life {
+  background-color: black;
+}
+.gift-extra-bomb {
+  background-color: yellow;
+}
+.gift-time {
+  background-color: navy;
+}

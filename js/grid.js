@@ -92,6 +92,11 @@ class Grid {
           cellDiv.className = 'block'
         } else if (cell == 'destructible') {
           cellDiv.className = 'wall'
+          const gifts = ['gift-extra-life', 'gift-extra-bomb', 'gift-time', '']
+          const randomGift = gifts[Math.floor(Math.random() * gifts.length) / 3]
+          if (randomGift) {
+            cellDiv.classList.add(randomGift)
+          }
         } else if (cell === 'unique') {
           cellDiv.className = 'unique'
         } else {

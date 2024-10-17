@@ -56,7 +56,7 @@ class Bomb {
       this.bomb.style.display = 'block'
       this.collision.style.display = 'none'
       this.explosionEffect()
-
+      this.bombNumber -= 1
       setTimeout(() => {
         this.collisionDetection()
       }, 3000)
@@ -111,6 +111,20 @@ class Bomb {
             console.log('1', this.score)
 
             this.updateScoreUI()
+            if (cell.classList.contains('gift-extra-life')) {
+              this.player.life++
+              console.log(
+                `Extra life obtained! Player life: ${this.player.life}`
+              )
+              cell.classList.remove('gift-extra-life')
+              cell.className = 'path'
+              this.grid[y][x] = 'empty'
+            } else if (cell.classList.contains('gift-extra-bomb')) {
+              this.bombNumber += 1
+              console.log(
+                `Extra bomb obtained! Player life: ${this.bombNumber}`
+              )
+            }
           }
           if (!cell.classList.contains('block')) {
             cell.className = 'path'
