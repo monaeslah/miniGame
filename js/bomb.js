@@ -23,6 +23,14 @@ class Bomb {
     this.bombPlacement()
     this.scoreMonitor = null
     this.renderUI()
+    this.extraBomb = document.createElement('img')
+    this.extraBomb.src = './images/extraBomb.svg'
+    this.extraBomb.className = 'extra-bomb'
+
+    this.extraLife = document.createElement('img')
+    this.extraLife.src = './images/start.png'
+    this.extraLife.className = 'extra-life'
+    this.extraLife.style.display = 'none'
   }
   renderUI () {
     this.scoreMonitor = document.createElement('div')
@@ -32,6 +40,10 @@ class Bomb {
     scoreValue.id = 'score-value'
     this.scoreMonitor.appendChild(scoreValue)
     document.body.appendChild(this.scoreMonitor)
+    this.bombMonitor = document.createElement('div')
+    this.bombMonitor.id = 'bomb-number'
+    this.bombMonitor.innerHTML = `Bomb remaining: ${this.bombNumber}`
+    document.body.appendChild(this.bombMonitor)
   }
   updateGrid (newGrid) {
     this.grid = newGrid
@@ -56,7 +68,9 @@ class Bomb {
       this.bomb.style.display = 'block'
       this.collision.style.display = 'none'
       this.explosionEffect()
+
       this.bombNumber -= 1
+      this.bombMonitor.innerHTML = `Bomb remaining: ${this.bombNumber}`
       setTimeout(() => {
         this.collisionDetection()
       }, 3000)
@@ -65,15 +79,16 @@ class Bomb {
   explosionEffect () {
     const explosionInterval = setInterval(() => {
       this.timer--
-      this.timerView.innerHTML = this.timer
+
       if (this.timer === 0) {
         this.bomb.style.display = 'none'
+
         this.collision.style.display = 'block'
 
-        this.timer = 4
+        this.timer = 3
         setTimeout(() => {
           this.collision.style.display = 'none'
-        }, 1000)
+        }, 2000)
         clearInterval(explosionInterval)
       }
     }, 1000)
@@ -108,21 +123,34 @@ class Bomb {
           }
           if (cell.classList.contains('wall')) {
             this.score += 50
-            console.log('1', this.score)
 
             this.updateScoreUI()
             if (cell.classList.contains('gift-extra-life')) {
+              cell.appendChild(this.extraLife)
+
+              this.extraLife.style.display = 'block'
               this.player.life++
-              console.log(
-                `Extra life obtained! Player life: ${this.player.life}`
-              )
+              setTimeout(() => {
+                this.extraLife.style.display = 'none'
+                console.log(
+                  `Extra life obtained! Player life: ${this.player.life}`
+                )
+              }, 2000)
+
               cell.classList.remove('gift-extra-life')
               cell.className = 'path'
               this.grid[y][x] = 'empty'
             } else if (cell.classList.contains('gift-extra-bomb')) {
+              cell.appendChild(this.extraBomb)
+              this.extraBomb.style.display = 'block'
               this.bombNumber += 1
+
+              setTimeout(() => {
+                this.extraBomb.style.display = 'none'
+              }, 2000)
+
               console.log(
-                `Extra bomb obtained! Player life: ${this.bombNumber}`
+                `Extra bomb obtained! Player boms: ${this.bombNumber}`
               )
             }
           }
@@ -138,13 +166,16 @@ class Bomb {
     const scoreElement = document.getElementById('score-value')
     if (scoreElement) {
       scoreElement.innerHTML = `Score: ${this.score}`
-      console.log(this.score)
     }
   }
 }
 const bomb = new Bomb(player, grid)
 document.addEventListener('keydown', e => {
   if (e.code === 'Space') {
-    bomb.bombPlacement(true)
+    if (bomb.bombNumber != 0) {
+      bomb.bombPlacement(true)
+    } else {
+      console.log('no bomb ha ha ha')
+    }
   }
 })

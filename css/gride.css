@@ -11,13 +11,13 @@
   box-sizing: border-box;
 }
 .wall {
-  background-color: red;
+  background-image: url('../images/wall.jpg');
 }
 .path {
-  background-color: green;
+  background-image: url('../images/grass.gif');
 }
 .block {
-  background-color: gray;
+  background-image: url('../images/block.jpg');
 }
 #sprite {
   width: 30px;
@@ -51,9 +51,14 @@
 .gift-extra-life {
   background-color: black;
 }
-.gift-extra-bomb {
-  background-color: yellow;
+.extra-bomb {
+  width: 80%;
+  height: 80%;
 }
 .gift-time {
   background-color: navy;
+}
+.extra-life {
+  width: 100%;
+  height: 100%;
 }

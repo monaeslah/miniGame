@@ -9,9 +9,13 @@ class Player {
     this.isAlive = true
 
     this.sprite = document.createElement('img')
-    this.sprite.src = './images/bomberman.png'
+    this.sprite.src = './images/player.gif'
     this.sprite.id = 'sprite'
-
+    this.lifeMonitor = document.createElement('div')
+    this.lifeMonitor.className = 'player-sprite'
+    this.lifeElement = document.getElementById('player-sprite')
+    this.lifeElement = document.createElement('div')
+    document.body.appendChild(this.lifeElement)
     this.startingPosition()
     this.grid.initGrid(this.positionX, this.positionY)
     this.movement()
@@ -106,6 +110,7 @@ class Player {
   playerLife () {
     let death = setInterval(() => {
       this.duration--
+      this.lifeElement.innerHTML = `Time remainig : ${this.duration}`
       if (this.duration === 0) {
         this.gameOver()
         clearInterval(death)
@@ -114,10 +119,9 @@ class Player {
   }
   gameOver () {
     this.isAlive = false
-    // Stop player from moving or doing anything else
+
     document.removeEventListener('keydown', this.handleKeyPress.bind(this))
 
-    // Show Game Over screen with a Restart button
     const gameOverMessage = document.createElement('div')
     gameOverMessage.id = 'game-over'
     gameOverMessage.innerHTML = `<p>Game Over!</p>
@@ -125,7 +129,6 @@ class Player {
 
     document.body.appendChild(gameOverMessage)
 
-    // Remove the player sprite
     const playerCell = document.getElementById(
       `cell-${this.positionX}-${this.positionY}`
     )
@@ -133,25 +136,21 @@ class Player {
       playerCell.removeChild(this.sprite)
     }
 
-    // Add event listener to the Restart button
     const restartButton = document.getElementById('restart-btn')
     restartButton.addEventListener('click', () => this.restartGame())
   }
 
   restartGame () {
-    // Remove the Game Over message
     const gameOverMessage = document.getElementById('game-over')
     if (gameOverMessage) {
       document.body.removeChild(gameOverMessage)
       window.location.reload()
     }
 
-    // Reset player stats and position
     this.life = 3
     this.isAlive = true
     this.startingPosition()
 
-    // Re-enable player movement
     document.addEventListener('keydown', this.handleKeyPress.bind(this))
   }
 }
