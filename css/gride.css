@@ -86,3 +86,30 @@
   position: absolute;
   top: 10px;
 }
+.winner {
+  position: absolute;
+  top: 0;
+  left: 34%;
+}
+.winner p {
+  background-color: wheat;
+  color: blueviolet;
+  text-align: center;
+}
+.level-up {
+  position: absolute;
+
+  top: 0;
+  left: 14%;
+}
+.level-up p {
+  background-color: wheat;
+  color: blueviolet;
+  text-align: center;
+}
+.level-up img {
+  width: 100%;
+}
+.enemy {
+  width: 30px;
+}

@@ -8,11 +8,10 @@ class Grid {
     this.uniquePosition = null
     this.level = 1
     this.maxLevel = 3
+    this.gameStarted = false
   }
 
   initGrid (playerStartX, playerStartY) {
-    const lifeSound = new Audio('./sound/scream-ride-start-91271.mp3')
-    lifeSound.play()
     for (let y = 0; y < this.height; y++) {
       const row = []
       for (let x = 0; x < this.width; x++) {

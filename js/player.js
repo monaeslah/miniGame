@@ -4,7 +4,7 @@ class Player {
     this.positionX = 0
     this.positionY = 0
     this.numbers = 18
-    this.life = 2
+    this.life = 3
     this.duration = 120
     this.isAlive = true
 
@@ -21,6 +21,20 @@ class Player {
     this.grid.initGrid(this.positionX, this.positionY)
     this.movement()
     this.playerLife()
+
+    this.levelElement = document.createElement('div')
+    this.levelElement.classList = 'level-up'
+    document.body.appendChild(this.levelElement)
+    this.levelElement.style.display = 'none'
+
+    this.winnerElement = document.createElement('div')
+    this.winnerElement.classList = 'winner'
+    document.body.appendChild(this.winnerElement)
+    this.winnerElement.style.display = 'none'
+    this.deathMonitor = document.createElement('div')
+    this.deathMonitor.id = 'life-number'
+    this.deathMonitor.innerHTML = `life remaining: ${this.life}`
+    document.body.appendChild(this.deathMonitor)
   }
   startingPosition () {
     const oddNumbers = Array.from({ length: this.numbers }, (_, i) => i).filter(
@@ -69,7 +83,16 @@ class Player {
       gameGrid.level++
       const lifeSound = new Audio('./sound/game-level-complete-143022.mp3')
       lifeSound.play()
-      alert(`Level up! Welcome to level ${gameGrid.level}`)
+      this.levelElement.style.display = 'block'
+      this.levelElement.innerHTML = `
+     <img src="./images/looser2.gif" alt="" srcset="">
+     <p>Level up!!
+     <br>
+    Welcome to  level ${gameGrid.level}</p>`
+      setTimeout(() => {
+        this.levelElement.style.display = 'none'
+      }, 3000)
+
       gameGrid.grid = []
       gameGrid.initGrid(this.positionX, this.positionY)
       gameGrid.renderGrid()
@@ -77,7 +100,12 @@ class Player {
       this.updatePosition()
       bomb.updateGrid(gameGrid.grid)
     } else {
-      alert('Congratulations! You have completed the game!')
+      this.winnerElement.style.display = 'block'
+      this.winnerElement.innerHTML = `
+     <img src="./images/winner.gif" alt="" srcset="">
+     <p>Congratulations!!!
+     <br>
+   You have completed the game!</p>`
     }
   }
   movement (dx, dy) {
@@ -114,7 +142,7 @@ class Player {
     let death = setInterval(() => {
       this.duration--
       this.lifeElement.innerHTML = `Time remainig : ${this.duration}`
-      if (this.duration === 0) {
+      if (this.duration === 0 || this.life === 0) {
         this.gameOver()
         clearInterval(death)
       }
