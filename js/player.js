@@ -7,10 +7,11 @@ class Player {
     this.life = 2
     this.duration = 600
     this.isAlive = true
+
     this.sprite = document.createElement('img')
     this.sprite.src = './images/bomberman.png'
     this.sprite.id = 'sprite'
-    this.playerElement = document.getElementById('grid')
+
     this.startingPosition()
     this.grid.initGrid(this.positionX, this.positionY)
     this.movement()
@@ -50,7 +51,7 @@ class Player {
     if (currentCell) {
       currentCell.classList.add('player')
       currentCell.appendChild(this.sprite)
-      console.log()
+
       if (this.grid.grid[this.positionY][this.positionX] === 'unique') {
         console.log('hell yeah', currentCell.className)
 
@@ -59,10 +60,18 @@ class Player {
     }
   }
   nextLevel () {
-    alert(
-      'Congratulations! You reached the unique cell and advance to the next level!'
-    )
-    // Implement logic to advance to the next level, reset the game, etc.
+    if (gameGrid.level < gameGrid.maxLevel) {
+      gameGrid.level++
+      alert(`Level up! Welcome to level ${gameGrid.level}`)
+      gameGrid.grid = []
+      gameGrid.initGrid(this.positionX, this.positionY)
+      gameGrid.renderGrid()
+      this.startingPosition()
+      this.updatePosition()
+      bomb.updateGrid(gameGrid.grid)
+    } else {
+      alert('Congratulations! You have completed the game!')
+    }
   }
   movement (dx, dy) {
     const newX = this.positionX + dx
@@ -96,7 +105,6 @@ class Player {
   }
   playerLife () {
     let death = setInterval(() => {
-      console.log(this.duration)
       this.duration--
       if (this.duration === 0) {
         this.gameOver()

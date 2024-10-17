@@ -6,9 +6,11 @@ class Grid {
     this.domElement = document.getElementById('grid')
     this.grid = []
     this.uniquePosition = null
+
     this.level = 1
     this.maxLevel = 3
   }
+
   initGrid (playerStartX, playerStartY) {
     for (let y = 0; y < this.height; y++) {
       const row = []
@@ -22,8 +24,8 @@ class Grid {
         } else if (this.isPatternedBlock(x, y)) {
           row.push('block')
         } else {
-          if (Math.random() < 0.2) {
-            // 20% chance to be destructible
+          const wallChance = 0.2 + 0.1 * (this.level - 1)
+          if (Math.random() < wallChance) {
             row.push('destructible')
           } else {
             row.push('empty')
@@ -36,7 +38,6 @@ class Grid {
     return this.grid
   }
   isNearPlayer (x, y, playerStartX, playerStartY) {
-    // Define a 3x3 area around the player as the "safe zone"
     return Math.abs(x - playerStartX) <= 1 && Math.abs(y - playerStartY) <= 1
   }
   isOuterBorder (x, y) {
@@ -55,7 +56,6 @@ class Grid {
       uniqueX = Math.floor(Math.random() * this.width)
       uniqueY = Math.floor(Math.random() * this.height)
 
-      // Ensure it's not near the player's starting position and is in an empty cell
       if (
         !this.isNearPlayer(uniqueX, uniqueY, playerStartX, playerStartY) &&
         this.grid[uniqueY][uniqueX] === 'empty'
@@ -63,11 +63,12 @@ class Grid {
         isFarEnough = true
       }
     }
-    // Assign this position as "unique"
+
     this.grid[uniqueY][uniqueX] = 'unique'
-    this.uniquePosition = { x: uniqueX, y: uniqueY } // Store its position for reference later
+    this.uniquePosition = { x: uniqueX, y: uniqueY }
   }
   renderGrid () {
+    this.domElement.innerHTML = ''
     this.domElement.style.width = `${this.width * this.cellSize}px`
     this.domElement.style.height = `${this.height * this.cellSize}px`
     this.domElement.style.display = 'grid'
