@@ -12,6 +12,13 @@ body,
 .winner p {
   font-family: 'MyCustomFont', sans-serif;
 }
+body {
+  background-image: url('../images/pastel-sky-background-3garh8rnc14jym78-151761127.gif');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  background-size: cover;
+}
 #grid {
   margin: auto;
   padding: 0;
