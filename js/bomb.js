@@ -5,7 +5,7 @@ class Bomb {
     this.bomb = document.createElement('img')
     this.collision = document.createElement('img')
     this.timerView = document.createElement('p')
-    this.bomb.src = '/images/bomb.gif'
+    this.bomb.src = './images/bomb.gif'
     this.collision.src = './images/collision.gif'
     this.bomb.className = 'bomb'
     this.collision.className = 'collision'
